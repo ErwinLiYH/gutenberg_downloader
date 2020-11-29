@@ -47,8 +47,9 @@ def download_ebook(size,path,sleep_time):
                 break
             else:
                 pass
+    print('Finish, size: %0.3f'%folder_size(downPATH))
 
 def update(path,sleep_time):
     pass
 
-download_ebook(1,'.',5)
+download_ebook(10,'.',5)
