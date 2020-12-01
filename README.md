@@ -21,14 +21,26 @@ please use update after download command !!!!
 
 ### example
 
+pwd is “/home/kylis/Desktop/git project/github/dp_project”
+
+#### download:
+
 ![](./statics/img/1.png)
 
+the structure of ./test folder after “download” like following screenshot:
+
 ![](./statics/img/2.png)
+
+#### update:
 
 ![](./statics/img/3.png)
 
 ![](./statics/img/4.png)
 
+#### merge:
+
 ![](./statics/img/5.png)
+
+the structure of ./test folder after “merge” like following screenshot:
 
 ![](./statics/img/6.png)
