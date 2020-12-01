@@ -1,14 +1,16 @@
 # Author: Erwin
 # info: download and update txt resourse from http://www.gutenberg.org/ebooks/search/?sort_order=release_date
-# last modify: 2020/11/26
+# last modify: 2020/12/01
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 
-from sys import argv
+import os
+import sys
 import requests
 from bs4 import BeautifulSoup
 from time import sleep
 import os
 from lxml import etree
+import argparse
 
 def folder_size(path):
     return round(sum(os.path.getsize(path+'/'+f) for f in os.listdir(path))/1024/1024,3)
@@ -27,8 +29,12 @@ def check_update(url,path):
     links = [link for link in links if link.startswith('/ebooks/')]
     links = [link for link in links if link.split('/')[-1].isdigit()]
     index = int(links[0].split('/')[-1])
-    with open(confPATH,'r') as f:
-        strindex = f.readline()
+    strindex = -1
+    try:
+        with open(confPATH,'r') as f:
+            strindex = f.readline()
+    except:
+        pass
     if strindex==str(index):
         switch = False
     else:
@@ -38,13 +44,24 @@ def check_update(url,path):
     old_index = int(strindex)
     return index,old_index,switch
 
-def download_ebook_size(size,path,sleep_time):
+def download_ebook_size(args):
+    size=args.size
+    path=args.path
+    sleep_time=args.s
     if path.endswith('/') or path.endswith('\\'):
         downPATH = path + 'downPATH'
     else:
         downPATH = path+'/'+ 'downPATH'
     if os.path.exists(downPATH) == False:
         os.mkdir(downPATH)
+    else:
+        a = input('Warning: Do you want to delete downPATH and re download it? Y/n')
+        if a == 'y' or a == 'Y' or a == '':
+            pass
+        elif a == 'n' or a == 'N':
+            return
+        else:
+            return
     url='http://www.gutenberg.org/ebooks/search/?sort_order=release_date'
     index,oldindex,switch = check_update(url,path)
     header={'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36'}
@@ -72,7 +89,9 @@ def download_ebook_size(size,path,sleep_time):
                 num+=1
     print('Finish, size: %0.3f'%folder_size(downPATH))
 
-def update(path,sleep_time):
+def update(args):
+    path = args.path
+    sleep_time = args.s
     if path.endswith('/') or path.endswith('\\'):
         downPATH = path + 'downPATH'
     else:
@@ -106,4 +125,40 @@ def update(path,sleep_time):
             else:
                 num+=1
 
-download_ebook_size(5,'.',3)
+def merge(args):
+    path = args.path
+    if path.endswith('/') or path.endswith('\\'):
+        downPATH = path + 'downPATH'
+    else:
+        downPATH = path+'/'+ 'downPATH'
+    li = os.listdir(downPATH)
+    with open('./merge.txt','a') as me:
+        for txt_file in li:
+            with open(downPATH+'/'+txt_file,'r') as f:
+                me.write(f.read()+'\n')
+
+# parse command line arguments
+main_parser = argparse.ArgumentParser(description='Download and update txt resourse from http://www.gutenberg.org/ebooks/search/?sort_order=release_date')
+sub_parser = main_parser.add_subparsers()
+
+# download subcommand
+download_ebook_size_sub = sub_parser.add_parser('download',description='Download ebooks by size to downPATH')
+download_ebook_size_sub.add_argument('path',type=str,help='project path, namely, the parent path of "downPATH" folder')
+download_ebook_size_sub.add_argument('size',type=int,help='the least size you want')
+download_ebook_size_sub.add_argument('-s',type=int,metavar='sleep_time',default=5,help='the time gaps between two requests')
+download_ebook_size_sub.set_defaults(func=download_ebook_size)
+
+# update subcommand
+update_sub = sub_parser.add_parser('update',description='download laest ebooks to downPATH')
+update_sub.add_argument('path',type=str,help='project path, namely, the parent path of "downPATH" folder')
+update_sub.add_argument('-s',type=int,metavar='sleep_time',default=5,help='the time gaps between two requests')
+update_sub.set_defaults(func=update)
+
+# merge subcommand
+merge_sub = sub_parser.add_parser('merge',description='merge all the txt file in downPATH to merge.txt')
+merge_sub.add_argument('path',type=str,help='project path, namely, the parent path of "downPATH" folder')
+merge_sub.set_defaults(func=merge)
+
+args = main_parser.parse_args(sys.argv[1:])
+# print(args)
+args.func(args)
