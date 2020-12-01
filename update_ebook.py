@@ -1,5 +1,5 @@
 # Author: Erwin
-# info: download and update txt resourse from http://www.gutenberg.org/ebooks/search/?sort_order=release_date
+# info: download and update English txt resourse from http://www.gutenberg.org/ebooks/search/?sort_order=release_date
 # last modify: 2020/12/01
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -132,13 +132,13 @@ def merge(args):
     else:
         downPATH = path+'/'+ 'downPATH'
     li = os.listdir(downPATH)
-    with open('./merge.txt','a') as me:
+    with open(path+'/merge.txt','a') as me:
         for txt_file in li:
             with open(downPATH+'/'+txt_file,'r') as f:
                 me.write(f.read()+'\n')
 
 # parse command line arguments
-main_parser = argparse.ArgumentParser(description='Download and update txt resourse from http://www.gutenberg.org/ebooks/search/?sort_order=release_date')
+main_parser = argparse.ArgumentParser(description='Download and update English txt resourse from http://www.gutenberg.org/ebooks/search/?sort_order=release_date')
 sub_parser = main_parser.add_subparsers()
 
 # download subcommand
