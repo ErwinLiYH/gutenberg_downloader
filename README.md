@@ -21,14 +21,14 @@ please use update after download command !!!!
 
 ### example
 
-![](https://https://raw.githubusercontent.com/walkureHHH/juner_1_dp2_porject1/main/statics/img/1.png)
+![](./statics/img/1.png)
 
-![](https://https://raw.githubusercontent.com/walkureHHH/juner_1_dp2_porject1/main/statics/img/2.png)
+![](./statics/img/2.png)
 
-![](https://https://raw.githubusercontent.com/walkureHHH/juner_1_dp2_porject1/main/statics/img/3.png)
+![](./statics/img/3.png)
 
-![](https://https://raw.githubusercontent.com/walkureHHH/juner_1_dp2_porject1/main/statics/img/4.png)
+![](./statics/img/4.png)
 
-![](https://https://raw.githubusercontent.com/walkureHHH/juner_1_dp2_porject1/main/statics/img/5.png)
+![](./statics/img/5.png)
 
-![](https://https://raw.githubusercontent.com/walkureHHH/juner_1_dp2_porject1/main/statics/img/6.png)
+![](./statics/img/6.png)
