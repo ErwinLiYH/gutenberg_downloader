@@ -136,6 +136,27 @@ def merge(args):
             with open(downPATH+'/'+txt_file,'r') as f:
                 me.write(f.read()+'\n')
 
+class temp:
+    pass
+
+def merge_for_import(path):
+    args = temp()
+    args.path = path
+    merge(args)
+
+def download_ebook_size_for_import(path,size,sleep_time):
+    args = temp()
+    args.path = path
+    args.size = size
+    args.s = sleep_time
+    download_ebook_size(args)
+
+def update_for_import(path,sleep_time):
+    args = temp()
+    args.path = path
+    args.s = sleep_time
+    update(args)
+
 if __name__ == "__main__":
     import argparse
     # parse command line arguments
