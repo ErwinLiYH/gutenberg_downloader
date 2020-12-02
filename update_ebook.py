@@ -10,7 +10,6 @@ from bs4 import BeautifulSoup
 from time import sleep
 import os
 from lxml import etree
-import argparse
 
 def folder_size(path):
     return round(sum(os.path.getsize(path+'/'+f) for f in os.listdir(path))/1024/1024,3)
@@ -137,28 +136,30 @@ def merge(args):
             with open(downPATH+'/'+txt_file,'r') as f:
                 me.write(f.read()+'\n')
 
-# parse command line arguments
-main_parser = argparse.ArgumentParser(description='Download and update English txt resourse from http://www.gutenberg.org/ebooks/search/?sort_order=release_date')
-sub_parser = main_parser.add_subparsers()
+if __name__ == "__main__":
+    import argparse
+    # parse command line arguments
+    main_parser = argparse.ArgumentParser(description='Download and update English txt resourse from http://www.gutenberg.org/ebooks/search/?sort_order=release_date')
+    sub_parser = main_parser.add_subparsers()
 
-# download subcommand
-download_ebook_size_sub = sub_parser.add_parser('download',description='Download ebooks by size to downPATH')
-download_ebook_size_sub.add_argument('path',type=str,help='project path, namely, the parent path of "downPATH" folder')
-download_ebook_size_sub.add_argument('size',type=int,help='the least size you want')
-download_ebook_size_sub.add_argument('-s',type=int,metavar='sleep_time',default=5,help='the time gaps between two requests')
-download_ebook_size_sub.set_defaults(func=download_ebook_size)
+    # download subcommand
+    download_ebook_size_sub = sub_parser.add_parser('download',description='Download ebooks by size to downPATH')
+    download_ebook_size_sub.add_argument('path',type=str,help='project path, namely, the parent path of "downPATH" folder')
+    download_ebook_size_sub.add_argument('size',type=int,help='the least size you want')
+    download_ebook_size_sub.add_argument('-s',type=int,metavar='sleep_time',default=5,help='the time gaps between two requests')
+    download_ebook_size_sub.set_defaults(func=download_ebook_size)
 
-# update subcommand
-update_sub = sub_parser.add_parser('update',description='download laest ebooks to downPATH')
-update_sub.add_argument('path',type=str,help='project path, namely, the parent path of "downPATH" folder')
-update_sub.add_argument('-s',type=int,metavar='sleep_time',default=5,help='the time gaps between two requests')
-update_sub.set_defaults(func=update)
+    # update subcommand
+    update_sub = sub_parser.add_parser('update',description='download laest ebooks to downPATH')
+    update_sub.add_argument('path',type=str,help='project path, namely, the parent path of "downPATH" folder')
+    update_sub.add_argument('-s',type=int,metavar='sleep_time',default=5,help='the time gaps between two requests')
+    update_sub.set_defaults(func=update)
 
-# merge subcommand
-merge_sub = sub_parser.add_parser('merge',description='merge all the txt file in downPATH to merge.txt')
-merge_sub.add_argument('path',type=str,help='project path, namely, the parent path of "downPATH" folder')
-merge_sub.set_defaults(func=merge)
+    # merge subcommand
+    merge_sub = sub_parser.add_parser('merge',description='merge all the txt file in downPATH to merge.txt')
+    merge_sub.add_argument('path',type=str,help='project path, namely, the parent path of "downPATH" folder')
+    merge_sub.set_defaults(func=merge)
 
-args = main_parser.parse_args(sys.argv[1:])
-# print(args)
-args.func(args)
+    args = main_parser.parse_args(sys.argv[1:])
+    # print(args)
+    args.func(args)
