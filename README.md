@@ -25,22 +25,32 @@ pwd is “/home/kylis/Desktop/git project/github/dp_project”
 
 #### download:
 
-![](./statics/img/1.png)
+<img src="./statics/img/1.png" style="zoom:40%;" />
 
 the structure of ./test folder after “download” like following screenshot:
 
-![](./statics/img/2.png)
+<img src="./statics/img/2.png" style="zoom:30%;" />
 
 #### update:
 
-![](./statics/img/3.png)
+Before update, the latest ebook is 63938.
 
-![](./statics/img/4.png)
+<img src="./statics/img/after.png" style="zoom:30%;" />
+
+Update it:
+
+```shell
+python3 update_ebook.py update ./test
+```
+
+Now the latest ebbok is 63953.
+
+<img src="./statics/img/4.png" style="zoom:30%;" />
 
 #### merge:
 
-![](./statics/img/5.png)
+<img src="./statics/img/5.png" style="zoom:40%;" />
 
 the structure of ./test folder after “merge” like following screenshot:
 
-![](./statics/img/6.png)
+<img src="./statics/img/6.png" style="zoom:30%;" />
