@@ -56,7 +56,7 @@ the structure of ./test folder after “merge” like following screenshot:
 
 <img src="./statics/img/6.png" style="zoom:30%;" />
 
-### clean
+#### clean
 
 clean all the text file in input folder and out put to output folder
 
