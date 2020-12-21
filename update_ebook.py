@@ -27,21 +27,20 @@ def check_update(url,path):
         links.append(link.get('href'))
     links = [link for link in links if link.startswith('/ebooks/')]
     links = [link for link in links if link.split('/')[-1].isdigit()]
-    index = int(links[0].split('/')[-1])
+    latest_index = int(links[0].split('/')[-1])
     strindex = -1
     try:
         with open(confPATH,'r') as f:
             strindex = f.readline()
     except:
         pass
-    if strindex==str(index):
-        switch = False
+    if strindex==-1:
+        big_index=-1
+        small_index=-1
     else:
-        with open(confPATH,'w') as f:
-            f.write(str(index))
-        switch = True
-    old_index = int(strindex)
-    return index,old_index,switch
+        big_index=int(strindex.split('*')[0])
+        small_index=int(strindex.split('*')[1])
+    return latest_index,big_index,small_index
 
 def download_ebook_size(args):
     size=args.size
@@ -51,18 +50,29 @@ def download_ebook_size(args):
         downPATH = path + 'downPATH'
     else:
         downPATH = path+'/'+ 'downPATH'
+    if path.endswith('/') or path.endswith('\\'):
+        confPATH = path + 'conf'
+    else:
+        confPATH = path+'/'+ 'conf'
+
+    url='http://www.gutenberg.org/ebooks/search/?sort_order=release_date'
+    latest_index,big_index,small_index = check_update(url,path)
+    if small_index==-1:
+        index=latest_index
+        big_index=latest_index
+    elif small_index!=-1:
+        index=small_index-1
+
     if os.path.exists(downPATH) == False:
         os.mkdir(downPATH)
     else:
-        a = input('Warning: Do you want to delete downPATH and re download it? Y/n')
+        a = input('Warning: Do you want to go on dowload begin %d? Y/n'%(index))
         if a == 'y' or a == 'Y' or a == '':
             pass
         elif a == 'n' or a == 'N':
             return
         else:
             return
-    url='http://www.gutenberg.org/ebooks/search/?sort_order=release_date'
-    index,oldindex,switch = check_update(url,path)
     header={'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36'}
     while folder_size(downPATH) <= size:
         num = 1
@@ -86,6 +96,8 @@ def download_ebook_size(args):
                 break
             else:
                 num+=1
+    with open(confPATH,'w') as conf:
+        conf.write('%d*%d'%(big_index,index+1))
     print('Finish, size: %0.3f'%folder_size(downPATH))
 
 def update(args):
@@ -95,15 +107,19 @@ def update(args):
         downPATH = path + 'downPATH'
     else:
         downPATH = path+'/'+ 'downPATH'
+    if path.endswith('/') or path.endswith('\\'):
+        confPATH = path + 'conf'
+    else:
+        confPATH = path+'/'+ 'conf'
     if os.path.exists(downPATH) == False:
         os.mkdir(downPATH)
     url='http://www.gutenberg.org/ebooks/search/?sort_order=release_date'
-    index,oldindex,switch = check_update(url,path)
-    if switch == False:
+    latest_index,big_index,small_index = check_update(url,path)
+    if latest_index == big_index:
         print('all things are up to date')
         return
     header={'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36'}
-    for ind_ex in range(oldindex+1,index+1):
+    for ind_ex in range(big_index+1,latest_index+1):
         num = 1
         while num <= 3:
             temp_requ = requests.get('http://www.gutenberg.org/ebooks/%d'%ind_ex,headers=header)
@@ -123,6 +139,9 @@ def update(args):
                 break
             else:
                 num+=1
+    big_index=latest_index
+    with open(confPATH,'w') as conf:
+        conf.write('%d*%d'%(big_index,small_index))
 
 def merge(args):
     path = args.path
