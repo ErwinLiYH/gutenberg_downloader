@@ -224,8 +224,8 @@ if __name__ == "__main__":
     update_sub.set_defaults(func=update)
 
     # merge subcommand
-    merge_sub = sub_parser.add_parser('merge',description='merge all the txt file in downPATH to merge.txt')
-    merge_sub.add_argument('path',type=str,help='project path, namely, the parent path of "downPATH" folder')
+    merge_sub = sub_parser.add_parser('merge',description='merge all the txt file in path to merge.txt')
+    merge_sub.add_argument('path',type=str,help='the path of folder caontains all text file you want to merge')
     merge_sub.set_defaults(func=merge)
 
     clean_sub = sub_parser.add_parser('clean',description='extract words of all text data')
