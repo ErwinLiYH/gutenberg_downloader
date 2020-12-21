@@ -2,7 +2,7 @@
 # info: download and update English txt resourse from http://www.gutenberg.org/ebooks/search/?sort_order=release_date
 # last modify: 2020/12/01
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
-
+import re
 import os
 import sys
 import requests
@@ -145,15 +145,43 @@ def update(args):
 
 def merge(args):
     path = args.path
-    if path.endswith('/') or path.endswith('\\'):
-        downPATH = path + 'downPATH'
-    else:
-        downPATH = path+'/'+ 'downPATH'
-    li = os.listdir(downPATH)
-    with open(path+'/merge.txt','a') as me:
+
+    li = os.listdir(path)
+    with open(path+'/../merge.txt','a') as me:
         for txt_file in li:
-            with open(downPATH+'/'+txt_file,'r') as f:
+            with open(path+'/'+txt_file,'r') as f:
                 me.write(f.read()+'\n')
+
+def extract_words(string):
+    b=re.compile(r'[a-z]+', re.I).findall(string)
+    s=''
+    for i in b:
+        s+=(i+' ')
+    return s
+
+def clean(args):
+    inp_folder=args.input
+    out_folder=args.output
+
+    if inp_folder.endswith('/') or inp_folder.endswith('\\'):
+        inp_folder = inp_folder[0:-1]
+
+    if out_folder.endswith('/') or out_folder.endswith('\\'):
+        out_folder = out_folder[0:-1]
+
+    if inp_folder==out_folder:
+        raise Exception("inupt and out put can't be same!!!")
+    if os.path.isdir(inp_folder)==False:
+        raise Exception('input sholud be a folder!!!')
+    if os.path.isdir(out_folder)==False:
+        raise Exception('output shold be a folder!!!')
+    files = os.listdir(inp_folder)
+    for fil_e in files:
+        i_d=fil_e.split('.')[0]
+        with open('%s/%s'%(inp_folder,fil_e),'r') as inp:
+            s=extract_words(inp.read())
+            with open('%s/%s'%(out_folder,fil_e),'w') as out:
+                out.write(i_d+'\t'+s)
 
 class temp:
     pass
@@ -199,6 +227,11 @@ if __name__ == "__main__":
     merge_sub = sub_parser.add_parser('merge',description='merge all the txt file in downPATH to merge.txt')
     merge_sub.add_argument('path',type=str,help='project path, namely, the parent path of "downPATH" folder')
     merge_sub.set_defaults(func=merge)
+
+    clean_sub = sub_parser.add_parser('clean',description='extract words of all text data')
+    clean_sub.add_argument('input',type=str,help='the parent path of text file')
+    clean_sub.add_argument('output',type=str,help='the output path')
+    clean_sub.set_defaults(func=clean)
 
     args = main_parser.parse_args(sys.argv[1:])
     # print(args)
