@@ -66,7 +66,7 @@ def download_ebook_size(args):
     if os.path.exists(downPATH) == False:
         os.mkdir(downPATH)
     else:
-        a = input('Warning: Do you want to go on dowload begin %d? Y/n'%(index))
+        a = input('Warning: Do you want to go on dowload begin %d? Y/n:'%(index))
         if a == 'y' or a == 'Y' or a == '':
             pass
         elif a == 'n' or a == 'N':
@@ -89,6 +89,8 @@ def download_ebook_size(args):
                     print('requests http://www.gutenberg.org/files/%d/%d-0.txt successfully'%(index,index))
                     with open(downPATH+'/'+str(index)+'.txt','wb') as txtfile:
                         txtfile.write(temp_requ.content)
+                    with open(confPATH,'w') as conf:
+                        conf.write('%d*%d'%(latest_index,index))
                 else:
                     print('%d is not English book'%index)
                 sleep(sleep_time)
@@ -139,9 +141,8 @@ def update(args):
                 break
             else:
                 num+=1
-    big_index=latest_index
     with open(confPATH,'w') as conf:
-        conf.write('%d*%d'%(big_index,small_index))
+        conf.write('%d*%d'%(latest_index,small_index))
 
 def merge(args):
     path = args.path
@@ -183,6 +184,29 @@ def clean(args):
             s=extract_words(inp.read())
             with open('%s/%s'%(out_folder,fil_e),'w') as out:
                 out.write(i_d+split+s)
+
+def toxml(args):
+    inp_folder=args.input
+    out_folder=args.output
+    if inp_folder.endswith('/') or inp_folder.endswith('\\'):
+        inp_folder = inp_folder[0:-1]
+
+    if out_folder.endswith('/') or out_folder.endswith('\\'):
+        out_folder = out_folder[0:-1]
+
+    if inp_folder==out_folder:
+        raise Exception("inupt and out put can't be same!!!")
+    if os.path.isdir(inp_folder)==False:
+        raise Exception('input sholud be a folder!!!')
+    if os.path.isdir(out_folder)==False:
+        raise Exception('output shold be a folder!!!')
+    files = os.listdir(inp_folder)
+    for fil_e in files:
+        i_d=fil_e.split('.')[0]
+        with open('%s/%s'%(inp_folder,fil_e),'r') as inp:
+            s=inp.read()
+            with open('%s/%s.xml'%(out_folder,i_d),'w') as out:
+                out.write('<text>'+s+'</text>')
 
 class temp:
     pass
@@ -234,6 +258,11 @@ if __name__ == "__main__":
     clean_sub.add_argument('output',type=str,help='the output path')
     clean_sub.add_argument('-s',metavar='split char',type=str,help='the split char between id and content',default='\t')
     clean_sub.set_defaults(func=clean)
+
+    xml_sub = sub_parser.add_parser('toxml',description='convert plain text file to xml file')
+    xml_sub.add_argument('input',type=str,help='the parent path of text file')
+    xml_sub.add_argument('output',type=str,help='the output path')
+    xml_sub.set_defaults(func=toxml)
 
     args = main_parser.parse_args(sys.argv[1:])
     # print(args)
