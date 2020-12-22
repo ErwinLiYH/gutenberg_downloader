@@ -64,7 +64,7 @@ clean all the text file in input folder and out put to output folder
 
 ```
 doc_id	content
-#splited by -s parameter, nolmally use ' ',ot '\t'
+#splited by -s parameter, nolmally use ' ' or '\t'
 ```
 
 <img src="./statics/img/7.png" style="zoom:40%;" />
