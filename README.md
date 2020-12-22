@@ -76,3 +76,16 @@ The 64059.txt in downPATH before clean:
 The 64059.txt in out folder after clean:
 
 <img src="./statics/img/10.png" style="zoom:20%;" />
+
+## TF-IDF
+
+Check the help:
+
+```python3
+python search.py -h
+```
+
+the search file should have format like: id\<space\>content
+
+result:
+<img src="./statics/img/11.png" style="zoom:40%;" />

@@ -147,7 +147,7 @@ def merge(args):
     path = args.path
 
     li = os.listdir(path)
-    with open(path+'/../merge.txt','a') as me:
+    with open(path+'/merge.txt','a') as me:
         for txt_file in li:
             with open(path+'/'+txt_file,'r') as f:
                 me.write(f.read()+'\n')
@@ -162,6 +162,7 @@ def extract_words(string):
 def clean(args):
     inp_folder=args.input
     out_folder=args.output
+    split=args.s
 
     if inp_folder.endswith('/') or inp_folder.endswith('\\'):
         inp_folder = inp_folder[0:-1]
@@ -181,7 +182,7 @@ def clean(args):
         with open('%s/%s'%(inp_folder,fil_e),'r') as inp:
             s=extract_words(inp.read())
             with open('%s/%s'%(out_folder,fil_e),'w') as out:
-                out.write(i_d+'\t'+s)
+                out.write(i_d+split+s)
 
 class temp:
     pass
@@ -231,6 +232,7 @@ if __name__ == "__main__":
     clean_sub = sub_parser.add_parser('clean',description='extract words of all text data')
     clean_sub.add_argument('input',type=str,help='the parent path of text file')
     clean_sub.add_argument('output',type=str,help='the output path')
+    clean_sub.add_argument('-s',metavar='split char',type=str,help='the split char between id and content',default='\t')
     clean_sub.set_defaults(func=clean)
 
     args = main_parser.parse_args(sys.argv[1:])
