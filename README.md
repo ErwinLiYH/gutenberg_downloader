@@ -1,10 +1,10 @@
 # Data processing workshop Ⅱ group project
 
-This repository includ all code writen by Erwin(kylis) for this group project
+This repository include all code written by Erwin(kylis) for this group project
 
 ## 1. data_collect.py
 
-download and update English txt resourse from http://www.gutenberg.org/ebooks/search/?sort_order=release_date
+download and update English txt resource from http://www.gutenberg.org/ebooks/search/?sort_order=release_date
 
 ### usage
 
@@ -22,60 +22,35 @@ please use update after download command !!!!
 
 ### example
 
-pwd is “/home/kylis/Desktop/git project/github/dp_project”
+A example workflow of data collect and process
 
 #### download:
 
-<img src="./statics/img/1.png" style="zoom:40%;" />
+![](./statics/img/e1.png)
 
-the structure of ./test folder after “download” like following screenshot:
-
-<img src="./statics/img/2.png" style="zoom:30%;" />
+the content in conf file means the files in localhost is from 64079 to 64094.
 
 #### update:
 
-Before update, the latest ebook is 63938.
+we delete the 64094 and modify the conf file to “64093*64079”, than update it
 
-<img src="./statics/img/after.png" style="zoom:30%;" />
+![](./statics/img/e2.png)
 
-Update it:
+#### clean:
 
-```shell
-python3 update_ebook.py update ./test
-```
+![](./statics/img/e3.png)
 
-Now the latest ebbok is 63953.
+the 64079.txt in downPATH is:
 
-<img src="./statics/img/4.png" style="zoom:30%;" />
+![](./statics/img/e4.png)
 
-#### merge:
+the 64079.txt in out_by_SPACE is:
 
-<img src="./statics/img/5.png" style="zoom:40%;" />
+![](./statics/img/e5.png)
 
-the structure of ./test folder after “merge” like following screenshot: (modified, in this situation, now the merge.txt will in downPATH)
+#### merge
 
-<img src="./statics/img/6.png" style="zoom:30%;" />
-
-#### clean
-
-clean all the text file in input folder and out put to output folder
-
-“clean” means: extract all the words in text file, and reformat it to
-
-```
-doc_id	content
-#splited by -s parameter, nolmally use ' ' or '\t'
-```
-
-<img src="./statics/img/7.png" style="zoom:40%;" />
-
-The 64059.txt in downPATH before clean:
-
-<img src="./statics/img/8.png" style="zoom:20%;" />
-
-The 64059.txt in out folder after clean:
-
-<img src="./statics/img/10.png" style="zoom:20%;" />
+![](./statics/img/e6.png)
 
 ## TF-IDF
 
@@ -85,7 +60,8 @@ Check the help:
 python search.py -h
 ```
 
-the search file should have format like: id\<space\>content
+the searched file should have format like: id\<space\>content
 
-result:
-<img src="./statics/img/11.png" style="zoom:40%;" />
+![](./statics/img/e7.png)
+
+format: key_word,file_id tf-idf

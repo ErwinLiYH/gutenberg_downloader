@@ -214,7 +214,7 @@ if __name__ == "__main__":
     # download subcommand
     download_ebook_size_sub = sub_parser.add_parser('download',description='Download ebooks by size to downPATH')
     download_ebook_size_sub.add_argument('path',type=str,help='project path, namely, the parent path of "downPATH" folder')
-    download_ebook_size_sub.add_argument('size',type=int,help='the least size you want')
+    download_ebook_size_sub.add_argument('size',type=float,help='the least size you want')
     download_ebook_size_sub.add_argument('-s',type=int,metavar='sleep_time',default=5,help='the time gaps between two requests')
     download_ebook_size_sub.set_defaults(func=download_ebook_size)
 
