@@ -52,7 +52,7 @@ Now the latest ebbok is 63953.
 
 <img src="./statics/img/5.png" style="zoom:40%;" />
 
-the structure of ./test folder after “merge” like following screenshot:
+the structure of ./test folder after “merge” like following screenshot: (modified, in this situation, now the merge.txt will in downPATH)
 
 <img src="./statics/img/6.png" style="zoom:30%;" />
 
@@ -64,7 +64,7 @@ clean all the text file in input folder and out put to output folder
 
 ```
 doc_id	content
-#splited by \t
+#splited by -s parameter, nolmally use ' ',ot '\t'
 ```
 
 <img src="./statics/img/7.png" style="zoom:40%;" />
