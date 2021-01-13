@@ -165,6 +165,13 @@ def clean(args):
     out_folder=args.output
     split=args.s
 
+    if split=='SPACE':
+        split=' '
+    elif split=='TAB':
+        split='\t'
+    else:
+        split=' '
+
     if inp_folder.endswith('/') or inp_folder.endswith('\\'):
         inp_folder = inp_folder[0:-1]
 
@@ -256,7 +263,7 @@ if __name__ == "__main__":
     clean_sub = sub_parser.add_parser('clean',description='extract words of all text data')
     clean_sub.add_argument('input',type=str,help='the parent path of text file')
     clean_sub.add_argument('output',type=str,help='the output path')
-    clean_sub.add_argument('-s',metavar='split char',type=str,help='the split char between id and content',default='\t')
+    clean_sub.add_argument('-s',metavar='split char',type=str,help='the split char between id and content, "SPACE" or "TAB"', default='TAB')
     clean_sub.set_defaults(func=clean)
 
     xml_sub = sub_parser.add_parser('toxml',description='convert plain text file to xml file')

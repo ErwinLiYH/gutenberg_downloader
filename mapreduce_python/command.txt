@@ -1,0 +1,2 @@
+shell command:
+cat merge.txt | python3 mapper.py | sort | reducer.py > result.txt

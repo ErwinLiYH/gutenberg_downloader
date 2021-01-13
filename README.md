@@ -38,6 +38,8 @@ we delete the 64094 and modify the conf file to “64093*64079”, than update i
 
 #### clean:
 
+the picture is not updated, the argument -s should be ‘SPACE’ or ‘TAB’, not ‘ ’.
+
 ![](./statics/img/e3.png)
 
 the 64079.txt in downPATH is:
