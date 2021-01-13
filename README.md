@@ -59,7 +59,7 @@ the 64079.txt in out_by_SPACE is:
 the text file should have format like: id\<TAB\>content
 
 ```shell
-cat merge.txt | python3 mapper.py | sort | reducer.py > result.txt
+cat merge.txt | python3 mapper.py | sort | python3 reducer.py > result.txt
 ```
 
 part of result.txt:
