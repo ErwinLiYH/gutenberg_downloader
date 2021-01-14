@@ -1,6 +1,6 @@
 # Data processing workshop Ⅱ group project
 
-This repository include all code written by Erwin(kylis) for this group project
+This repository include all code written by Erwin(kylis) for this group project, if you have any problem or the code have any bugs, please contact me by wechat 13125261195 or my student email.
 
 ## 1. data_collect.py
 
@@ -16,6 +16,8 @@ python data_collect.py download -h
 python data_collect.py update -h
 python data_collect.py merge -h
 python data_collect.py clean -h
+python data_collect.py toxml -h
+python data_collect.py x2j -h
 ```
 
 please use update after download command !!!!
@@ -26,33 +28,59 @@ A example workflow of data collect and process
 
 #### download:
 
+download at least 1M e-books to test/downPATH
+
 ![](./statics/img/e1.png)
 
-the content in conf file means the files in localhost is from 64079 to 64094.
+the content in conf file means the files in localhost is from 64280 to 64284.
 
 #### update:
 
-we delete the 64094 and modify the conf file to “64093*64079”, than update it
+we delete the 64284 and modify the conf file to “64283*64280”, than update it
 
 ![](./statics/img/e2.png)
 
-#### clean:
+The 64284.txt come back and the conf file retrieved.
 
-the picture is not updated, the argument -s should be ‘SPACE’ or ‘TAB’, not ‘ ’.
+#### clean:
 
 ![](./statics/img/e3.png)
 
-the 64079.txt in downPATH is:
+the 64280.txt in downPATH is:
 
 ![](./statics/img/e4.png)
 
-the 64079.txt in out_by_SPACE is:
+the 64280.txt in out_by_SPACE is:
 
 ![](./statics/img/e5.png)
+
+the 64280.txt in out_by_TAB is:
+
+![](./statics/img/e51.png)
 
 #### merge
 
 ![](./statics/img/e6.png)
+
+#### toxml
+
+![](./statics/img/e8.png)
+
+the xml file in test/xml
+
+![](./statics/img/e81.png)
+
+### x2j
+
+![](./statics/img/e9.png)
+
+the json file in test/json
+
+![](./statics/img/e91.png)
+
+The merged file will be used in mapreduce with python and search by TFIDF.
+
+The xml file and json file will be used in solr and elasticsearch.
 
 ## 2. mapreduce_python
 
@@ -97,3 +125,4 @@ search.py only can run in linux who use “python3” to run python, like debian
 ![](./statics/img/e7.png)
 
 output format: key_word,file_id tf-idf
+

@@ -10,6 +10,8 @@ from bs4 import BeautifulSoup
 from time import sleep
 import os
 from lxml import etree
+import xmltodict
+import json
 
 def folder_size(path):
     return round(sum(os.path.getsize(path+'/'+f) for f in os.listdir(path))/1024/1024,3)
@@ -89,7 +91,7 @@ def download_ebook_size(args):
                     print('requests http://www.gutenberg.org/files/%d/%d-0.txt successfully'%(index,index))
                     with open(downPATH+'/'+str(index)+'.txt','wb') as txtfile:
                         txtfile.write(temp_requ.content)
-                    with open(confPATH,'w') as conf:
+                    with open(confPATH,'w',encoding='utf-8-sig') as conf:
                         conf.write('%d*%d'%(latest_index,index))
                 else:
                     print('%d is not English book'%index)
@@ -150,7 +152,7 @@ def merge(args):
     li = os.listdir(path)
     with open(path+'/merge.txt','a') as me:
         for txt_file in li:
-            with open(path+'/'+txt_file,'r') as f:
+            with open(path+'/'+txt_file,'r',encoding='utf-8-sig') as f:
                 me.write(f.read()+'\n')
 
 def extract_words(string):
@@ -189,7 +191,7 @@ def clean(args):
         i_d=fil_e.split('.')[0]
         with open('%s/%s'%(inp_folder,fil_e),'r') as inp:
             s=extract_words(inp.read())
-            with open('%s/%s'%(out_folder,fil_e),'w') as out:
+            with open('%s/%s'%(out_folder,fil_e),'w',encoding='utf-8-sig') as out:
                 out.write(i_d+split+s)
 
 def toxml(args):
@@ -212,8 +214,32 @@ def toxml(args):
         i_d=fil_e.split('.')[0]
         with open('%s/%s'%(inp_folder,fil_e),'r') as inp:
             s=inp.read()
-            with open('%s/%s.xml'%(out_folder,i_d),'w') as out:
-                out.write('<text>'+s+'</text>')
+            with open('%s/%s.xml'%(out_folder,i_d),'w',encoding='utf-8-sig') as out:
+                out.write('<?xml version="1.0" encoding="UTF-8"?>\n<ebook>\n<id>'+i_d+'</id>\n<text>\n'+s+'\n</text>\n</ebook>')
+
+def xmltojson(args):
+    inp_folder=args.input
+    out_folder=args.output
+    if inp_folder.endswith('/') or inp_folder.endswith('\\'):
+        inp_folder = inp_folder[0:-1]
+
+    if out_folder.endswith('/') or out_folder.endswith('\\'):
+        out_folder = out_folder[0:-1]
+
+    if inp_folder==out_folder:
+        raise Exception("inupt and out put can't be same!!!")
+    if os.path.isdir(inp_folder)==False:
+        raise Exception('input sholud be a folder!!!')
+    if os.path.isdir(out_folder)==False:
+        raise Exception('output shold be a folder!!!')
+    files = os.listdir(inp_folder)
+    for fil_e in files:
+        i_d=fil_e.split('.')[0]
+        with open('%s/%s'%(inp_folder,fil_e),'r') as inp:
+            s=inp.read()
+            o=xmltodict.parse(s)
+            with open('%s/%s.xml'%(out_folder,i_d),'w',encoding='utf-8-sig') as out:
+                json.dump(o,out,indent=True)
 
 class temp:
     pass
@@ -270,6 +296,11 @@ if __name__ == "__main__":
     xml_sub.add_argument('input',type=str,help='the parent path of text file')
     xml_sub.add_argument('output',type=str,help='the output path')
     xml_sub.set_defaults(func=toxml)
+
+    json_sub = sub_parser.add_parser('x2j',description='convert all xml file in a folder to json file')
+    json_sub.add_argument('input',type=str,help='the parent path of text file')
+    json_sub.add_argument('output',type=str,help='the output path')
+    json_sub.set_defaults(func=xmltojson)
 
     args = main_parser.parse_args(sys.argv[1:])
     # print(args)
