@@ -1,6 +1,6 @@
 # Author: Erwin
 # info: download and update English txt resourse from http://www.gutenberg.org/ebooks/search/?sort_order=release_date
-# last modify: 2020/12/01
+# last modify: 2021/5/23
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 import re
 import os
@@ -32,7 +32,7 @@ def check_update(url,path):
     latest_index = int(links[0].split('/')[-1])
     strindex = -1
     try:
-        with open(confPATH,'r') as f:
+        with open(confPATH,'r',encoding='utf-8-sig') as f:
             strindex = f.readline()
     except:
         pass
@@ -88,11 +88,19 @@ def download_ebook_size(args):
                 if a[lan_in+1] == 'English' or a[0]=='英语':
                     print('size: %0.3f, begin requests http://www.gutenberg.org/files/%d/%d-0.txt'%(folder_size(downPATH),index,index))
                     temp_requ = requests.get('http://www.gutenberg.org/files/%d/%d-0.txt'%(index,index),headers=header)
-                    print('requests http://www.gutenberg.org/files/%d/%d-0.txt successfully'%(index,index))
+                    if temp_requ.status_code!=200:
+                        epub=True
+                        temp_requ = requests.get('http://www.gutenberg.org/cache/epub/%d/pg%d.txt'%(index,index),headers=header)
+                    else:
+                        epub=False
+                    if epub:
+                        print('requests http://www.gutenberg.org/cache/epub/%d/pg%d.txt successfully'%(index,index))
+                    else:
+                        print('requests http://www.gutenberg.org/files/%d/%d-0.txt successfully'%(index,index))
                     with open(downPATH+'/'+str(index)+'.txt','wb') as txtfile:
                         txtfile.write(temp_requ.content)
                     with open(confPATH,'w',encoding='utf-8-sig') as conf:
-                        conf.write('%d*%d'%(latest_index,index))
+                        conf.write('%d*%d'%(big_index,index))
                 else:
                     print('%d is not English book'%index)
                 sleep(sleep_time)
@@ -100,8 +108,11 @@ def download_ebook_size(args):
                 break
             else:
                 num+=1
-    with open(confPATH,'w') as conf:
-        conf.write('%d*%d'%(big_index,index+1))
+        if num==4:
+            index-=1
+            print("%d download failed"%index)
+    # with open(confPATH,'w') as conf:
+    #     conf.write('%d*%d'%(big_index,index+1))
     print('Finish, size: %0.3f'%folder_size(downPATH))
 
 def update(args):
@@ -134,7 +145,15 @@ def update(args):
                 if a[lan_in+1] == 'English' or a[0]=='英语':
                     print('begin requests http://www.gutenberg.org/files/%d/%d-0.txt'%(ind_ex,ind_ex))
                     temp_requ = requests.get('http://www.gutenberg.org/files/%d/%d-0.txt'%(ind_ex,ind_ex),headers=header)
-                    print('requests http://www.gutenberg.org/files/%d/%d-0.txt successfully'%(ind_ex,ind_ex))
+                    if temp_requ.status_code != 200:
+                        epub = True
+                        temp_requ = requests.get('http://www.gutenberg.org/cache/epub/%d/pg%d.txt'%(ind_ex,ind_ex),headers=header)
+                    else:
+                        epub = False
+                    if epub:
+                        print('requests http://www.gutenberg.org/cache/epub/%d/pg%d.txt successfully'%(ind_ex,ind_ex))
+                    else:
+                        print('requests http://www.gutenberg.org/files/%d/%d-0.txt successfully'%(ind_ex,ind_ex))
                     with open(downPATH+'/'+str(ind_ex)+'.txt','wb') as txtfile:
                         txtfile.write(temp_requ.content)
                 else:
